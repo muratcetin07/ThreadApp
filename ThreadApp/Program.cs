@@ -11,6 +11,7 @@ namespace ThreadApp
     {
         public static Dictionary<string, int> wordDictionary = new Dictionary<string, int>();
         public static List<string> sentenceList = new List<string>();
+        public static bool isAllSentencesRun = false;
 
         public static void Main(string[] args)
         {
@@ -30,15 +31,21 @@ namespace ThreadApp
         {
             int threadCount = 5;
             Thread[] threads = new Thread[threadCount];
-            for (int n = 0; n < threads.Length; n++)
+
+            while (!isAllSentencesRun)
             {
-                if (sentenceList.Count > 0)
+                for (int n = 0; n < threads.Length; n++)
                 {
-                    threads[n] = new Thread(DoSubThread);
-                    threads[n].Start();
-                    threads[n].Join();
+                    if (sentenceList.Count > 0)
+                    {
+                        threads[n] = new Thread(DoSubThread);
+                        threads[n].Start();
+                        threads[n].Join();
+                    }
                 }
             }
+
+           
         }
 
         public static void DoSubThread()
@@ -49,7 +56,13 @@ namespace ThreadApp
                 GetWordCountOnSentence(selectedSentence);
                 CalculateEachWordCountinAllText(selectedSentence);
                 sentenceList.Remove(selectedSentence);
+
+                if(sentenceList.Count == 0)
+                {
+                    isAllSentencesRun = true;
+                }
             }
+            
         }
 
         public static void DoMainThread()
