@@ -91,16 +91,17 @@ namespace ThreadApp
             int totalWordCount = 0;
 
 
-            string[] sentences = Regex.Split(text, @"(?<=[\.!\?])\s+");
-            sentencesCount = sentences.Length;
+            var sentences = Regex.Split(text, @"(?<=[\.!\?])\s+").ToList();
+            sentences.RemoveAll(x=>x == "");
+            sentencesCount = sentences.Count;
 
             List<string> _senteces = new List<string>();
 
             foreach (string sentence in sentences)
             {
-                var afterRemoveLastChar = sentence.Remove(sentence.Length - 1, 1);
-                _senteces.Add(afterRemoveLastChar);
-                sentenceList.Add(afterRemoveLastChar);
+                    var afterRemoveLastChar = sentence.Remove(sentence.Length - 1, 1);
+                    _senteces.Add(afterRemoveLastChar);
+                    sentenceList.Add(afterRemoveLastChar);
             }
 
             foreach (var sentence in _senteces)
